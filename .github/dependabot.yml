@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/react-js"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/react-ts"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/remix-ts"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/vue-js"
+    schedule:
+      interval: "daily"
