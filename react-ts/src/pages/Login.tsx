@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
-import { NavigateFunction } from "react-router-dom";
 import { Button } from "../components/Button.js";
 import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
-import { userTokenPersister } from "../services/login.js";
+import { AuthService } from "../infrastructure/AuthService.js";
+import { TokenRepository } from "../infrastructure/TokenRepository.js";
 import { translateError } from "../utils/translateError.js";
 import "./Login.css";
+import { Router } from "../infrastructure/Router.js";
 
 interface LoginProps {
-  navigate: NavigateFunction;
-  login({ email, password }: LoginParams): Promise<any>;
+  router: Router;
+  authService: AuthService;
+  tokenRepository: TokenRepository;
 }
 
 export const Login = (props: LoginProps) => {
-  const { navigate, login } = props;
+  const { router, authService, tokenRepository } = props;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,10 +31,11 @@ export const Login = (props: LoginProps) => {
     event.preventDefault();
     setIsLoading(true);
     setErrorMessage(null);
-    login({ email, password })
+    authService
+      .execute({ email, password })
       .then((token) => {
-        userTokenPersister(token);
-        navigate("/recipes");
+        tokenRepository.save(token);
+        router.goToRecipes();
       })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));

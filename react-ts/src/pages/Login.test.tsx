@@ -2,6 +2,10 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Login } from "./Login";
+import { useNavigate } from "react-router-dom";
+import { AuthServiceApi } from "../infrastructure/AuthServiceApi";
+import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
+import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
 
 const fakeLogin = async ({ email, password }: LoginParams) => {
   if (email === "linustorvalds@gmail.com" && password === "ilovecats") {
@@ -12,7 +16,16 @@ const fakeLogin = async ({ email, password }: LoginParams) => {
 describe("Login", () => {
   it("redirects to recipe page after login", async () => {
     const navigateSpy = vi.fn();
-    render(<Login navigate={navigateSpy} login={fakeLogin} />);
+    const authService = new AuthServiceApi();
+    const tokenRepository = new TokenRepositoryLocalStorage();
+
+    render(
+      <Login
+        router={new RouterReactRouter(navigateSpy)}
+        authService={authService}
+        tokenRepository={tokenRepository}
+      />
+    );
 
     const user = userEvent.setup();
 
