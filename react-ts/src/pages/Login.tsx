@@ -3,20 +3,13 @@ import { Button } from "../components/Button.js";
 import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
-import { AuthService } from "../infrastructure/AuthService.js";
-import { TokenRepository } from "../infrastructure/TokenRepository.js";
+import { useDependenciesContext } from "../infrastructure/dependencies/Dependencies.js";
 import { translateError } from "../utils/translateError.js";
 import "./Login.css";
-import { Router } from "../infrastructure/Router.js";
 
-interface LoginProps {
-  router: Router;
-  authService: AuthService;
-  tokenRepository: TokenRepository;
-}
-
-export const Login = (props: LoginProps) => {
-  const { router, authService, tokenRepository } = props;
+export const Login = () => {
+  const { dependencies } = useDependenciesContext();
+  const { authService, tokenRepository, router } = dependencies;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -1,5 +1,9 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { AuthServiceApi } from "../infrastructure/AuthServiceApi";
+import {
+  Dependencies,
+  DependenciesProvider,
+} from "../infrastructure/dependencies/Dependencies";
 import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
 import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
 import { Login } from "../pages/Login";
@@ -10,19 +14,18 @@ export const AppRoutes = () => {
   const authService = new AuthServiceApi();
   const tokenRepository = new TokenRepositoryLocalStorage();
 
+  const dependencies: Dependencies = {
+    authService,
+    tokenRepository,
+    router,
+  };
+
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Login
-            authService={authService}
-            router={router}
-            tokenRepository={tokenRepository}
-          />
-        }
-      />
-      <Route path="/recipes" element={<Recipes />} />
-    </Routes>
+    <DependenciesProvider dependencies={dependencies}>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/recipes" element={<Recipes />} />
+      </Routes>
+    </DependenciesProvider>
   );
 };
