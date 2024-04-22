@@ -53,6 +53,7 @@ export const Login = () => {
             .finally(() => {
               setIsLoading(false);
             });
+
         }}
       >
         <Title>Login with email</Title>
