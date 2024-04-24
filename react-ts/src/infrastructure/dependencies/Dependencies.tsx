@@ -1,38 +1,30 @@
 import { createContext, ReactNode, useContext } from "react";
-import { AuthService } from "../AuthService";
-import { Router } from "../Router";
-import { TokenRepository } from "../TokenRepository";
+import { interfaces } from "inversify";
 
-export type Dependencies = {
-  authService: AuthService;
-  tokenRepository: TokenRepository;
-  router: Router;
-};
+export const ContainerContext = createContext<interfaces.Container | null>(null);
 
-export const DependenciesContext = createContext<Dependencies | null>(null);
+export function useContainerContext() {
+  const container = useContext(ContainerContext);
 
-export function useDependenciesContext() {
-  const dependencies = useContext(DependenciesContext);
-
-  if (!dependencies) {
+  if (!container) {
     throw new Error(
-      "DependenciesContext must be inside a DependenciesProvider"
+      "ContainerContext must be inside a ContainerProvider"
     );
   }
 
-  return { dependencies };
+  return container;
 }
 
-export type DependenciesProviderProps = {
-  dependencies: Dependencies;
+export type ContainerProviderProps = {
+  container: interfaces.Container;
   children: ReactNode;
 };
 
-export function DependenciesProvider(props: DependenciesProviderProps) {
-  const { dependencies, children } = props;
+export function ContainerProvider(props: ContainerProviderProps) {
+  const { container, children } = props;
   return (
-    <DependenciesContext.Provider value={dependencies}>
+    <ContainerContext.Provider value={container}>
       {children}
-    </DependenciesContext.Provider>
+    </ContainerContext.Provider>
   );
 }

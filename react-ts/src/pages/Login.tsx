@@ -3,15 +3,17 @@ import { Button } from "../components/Button.js";
 import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
-import { useDependenciesContext } from "../infrastructure/dependencies/Dependencies.js";
+import { useContainerContext } from "../infrastructure/dependencies/Dependencies.js";
 import { translateError } from "../utils/translateError.js";
 import { LoginUseCase } from "../useCases/LoginUseCase.ts";
 
 import "./Login.css";
+import { AuthService } from "../infrastructure/AuthService.ts";
+import { TokenRepository } from "../infrastructure/TokenRepository.ts";
+import { Router } from "../infrastructure/Router.ts";
 
 export const Login = () => {
-  const { dependencies } = useDependenciesContext();
-  const { authService, tokenRepository, router } = dependencies;
+  const container = useContainerContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +28,10 @@ export const Login = () => {
     event.preventDefault();
     setIsLoading(true);
     setErrorMessage(null);
+
+    const authService = container.get<AuthService>("AuthService");
+    const tokenRepository = container.get<TokenRepository>("TokenRepository");
+    const router = container.get<Routerq>("Router");
 
     const loginUseCase = new LoginUseCase({ authService, tokenRepository, router });
 

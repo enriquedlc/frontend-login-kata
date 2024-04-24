@@ -1,8 +1,9 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
+
+import { Container } from "inversify";
 import { AuthServiceApi } from "../infrastructure/AuthServiceApi";
 import {
-  Dependencies,
-  DependenciesProvider,
+  ContainerProvider,
 } from "../infrastructure/dependencies/Dependencies";
 import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
 import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
@@ -14,18 +15,18 @@ export const AppRoutes = () => {
   const authService = new AuthServiceApi();
   const tokenRepository = new TokenRepositoryLocalStorage();
 
-  const dependencies: Dependencies = {
-    authService,
-    tokenRepository,
-    router,
-  };
+  const container = new Container();
+  container.bind("AuthService").toDynamicValue(() => authService);
+  container.bind("TokenRepository").toDynamicValue(() => tokenRepository);
+  container.bind("Router").toDynamicValue(() => router);
+
 
   return (
-    <DependenciesProvider dependencies={dependencies}>
+    <ContainerProvider container={container}>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/recipes" element={<Recipes />} />
       </Routes>
-    </DependenciesProvider>
+    </ContainerProvider>
   );
 };

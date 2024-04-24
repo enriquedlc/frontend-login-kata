@@ -4,8 +4,9 @@ import { describe, expect, it, vi } from "vitest";
 import { Login } from "./Login";
 import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
 import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
-import { Dependencies, DependenciesProvider } from "../infrastructure/dependencies/Dependencies";
+import { ContainerProvider } from "../infrastructure/dependencies/Dependencies";
 import { AuthService } from "../infrastructure/AuthService";
+import { Container } from "inversify";
 
 const fakeLogin = async ({ email, password }: LoginParams) => {
   if (email === "linustorvalds@gmail.com" && password === "ilovecats") {
@@ -24,16 +25,15 @@ describe("Login", () => {
       execute: async ({email, password}) => await fakeLogin({email, password})
     };
 
-    const dependencies: Dependencies = {
-      authService,
-      tokenRepository,
-      router,
-    };
-
+    const container = new Container();
+    container.bind("AuthService").toConstantValue(authService);
+    container.bind("TokenRepository").toConstantValue(tokenRepository);
+    container.bind("Router").toConstantValue(router);
+    
     render(
-      <DependenciesProvider dependencies={dependencies}>
+      <ContainerProvider container={container}>
         <Login />
-      </DependenciesProvider>
+      </ContainerProvider>
     );
 
     const user = userEvent.setup();
