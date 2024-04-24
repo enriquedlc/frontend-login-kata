@@ -1,15 +1,15 @@
 import { createContext, ReactNode, useContext } from "react";
 import { interfaces } from "inversify";
 
-export const ContainerContext = createContext<interfaces.Container | null>(null);
+export const ContainerContext = createContext<interfaces.Container | null>(
+  null
+);
 
 export function useContainerContext() {
   const container = useContext(ContainerContext);
 
   if (!container) {
-    throw new Error(
-      "ContainerContext must be inside a ContainerProvider"
-    );
+    throw new Error("ContainerContext must be inside a ContainerProvider");
   }
 
   return container;

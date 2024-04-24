@@ -31,11 +31,16 @@ export const Login = () => {
 
     const authService = container.get<AuthService>("AuthService");
     const tokenRepository = container.get<TokenRepository>("TokenRepository");
-    const router = container.get<Routerq>("Router");
+    const router = container.get<Router>("Router");
 
-    const loginUseCase = new LoginUseCase({ authService, tokenRepository, router });
+    const loginUseCase = new LoginUseCase({
+      authService,
+      tokenRepository,
+      router,
+    });
 
-    loginUseCase.execute({ email, password })
+    loginUseCase
+      .execute({ email, password })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));
   };
