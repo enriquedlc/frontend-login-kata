@@ -6,21 +6,26 @@ import { useNavigate } from "react-router-dom";
 import { AuthServiceApi } from "../infrastructure/AuthServiceApi";
 import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
 import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
-import { DependenciesProvider } from "../infrastructure/dependencies/Dependencies";
+import { Dependencies, DependenciesProvider } from "../infrastructure/dependencies/Dependencies";
+import { AuthService } from "../infrastructure/AuthService";
+import { TokenRepository } from '../infrastructure/TokenRepository';
 
 const fakeLogin = async ({ email, password }: LoginParams) => {
   if (email === "linustorvalds@gmail.com" && password === "ilovecats") {
     return "fake-jwt";
   }
+  return "";
 };
 
 describe("Login", () => {
   it("redirects to recipe page after login", async () => {
     const navigateSpy = vi.fn();
-    // TODO: MOCK OBJECTS
     const router = new RouterReactRouter(navigateSpy);
-    const authService = new AuthServiceApi();
     const tokenRepository = new TokenRepositoryLocalStorage();
+
+    const authService: AuthService = {
+      execute: async ({email, password}) => await fakeLogin({email, password})
+    };
 
     const dependencies: Dependencies = {
       authService,
@@ -29,7 +34,7 @@ describe("Login", () => {
     };
 
     render(
-      <DependenciesProvider>
+      <DependenciesProvider dependencies={dependencies}>
         <Login />
       </DependenciesProvider>
     );
