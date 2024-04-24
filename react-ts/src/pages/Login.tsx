@@ -5,6 +5,8 @@ import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
 import { useDependenciesContext } from "../infrastructure/dependencies/Dependencies.js";
 import { translateError } from "../utils/translateError.js";
+import { LoginUseCase } from "../useCases/LoginUseCase.ts";
+
 import "./Login.css";
 
 export const Login = () => {
@@ -24,12 +26,10 @@ export const Login = () => {
     event.preventDefault();
     setIsLoading(true);
     setErrorMessage(null);
-    authService
-      .execute({ email, password })
-      .then((token) => {
-        tokenRepository.save(token);
-        router.goToRecipes();
-      })
+
+    const loginUseCase = new LoginUseCase({ authService, tokenRepository, router });
+
+    loginUseCase.execute({ email, password })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));
   };
