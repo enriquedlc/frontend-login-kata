@@ -12,7 +12,10 @@ export class AuthServiceApi implements AuthService {
         },
       }
     );
+
     const data = await response.json();
+
+    console.log(data);
 
     if (data.status === "error") {
       throw new Error(data.code);

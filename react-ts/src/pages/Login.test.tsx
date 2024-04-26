@@ -17,26 +17,26 @@ const fakeLogin = async ({ email, password }: LoginParams) => {
 
 describe("Login", () => {
   it("redirects to recipe page after login", async () => {
+    const user = userEvent.setup();
     const navigateSpy = vi.fn();
     const router = new RouterReactRouter(navigateSpy);
     const tokenRepository = new TokenRepositoryLocalStorage();
 
     const authService: AuthService = {
-      execute: async ({email, password}) => await fakeLogin({email, password})
+      execute: async ({ email, password }) =>
+        await fakeLogin({ email, password }),
     };
 
     const container = new Container();
     container.bind("AuthService").toConstantValue(authService);
     container.bind("TokenRepository").toConstantValue(tokenRepository);
     container.bind("Router").toConstantValue(router);
-    
+
     render(
       <ContainerProvider container={container}>
         <Login />
       </ContainerProvider>
     );
-
-    const user = userEvent.setup();
 
     await user.type(
       screen.getByLabelText("Your email"),

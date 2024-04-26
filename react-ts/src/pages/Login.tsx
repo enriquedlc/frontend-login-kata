@@ -11,9 +11,11 @@ import "./Login.css";
 import { AuthService } from "../infrastructure/AuthService.ts";
 import { TokenRepository } from "../infrastructure/TokenRepository.ts";
 import { Router } from "../infrastructure/Router.ts";
+import { useAsyncError } from "../components/error/hooks/throwError.ts";
 
 export const Login = () => {
   const container = useContainerContext();
+  const { propagateError } = useAsyncError();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +44,7 @@ export const Login = () => {
     loginUseCase
       .execute({ email, password })
       .catch((err) => setErrorMessage(err.message))
+      .catch(propagateError)
       .finally(() => setIsLoading(false));
   };
 
