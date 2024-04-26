@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Title } from "../components/Title";
+
 import { RecipeCard } from "../components/RecipeCard";
+import { Title } from "../components/Title";
+
 import "./Recipes.css";
 
 type Recipe = {
@@ -12,8 +14,10 @@ type Recipe = {
 export const Recipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
+  //   const recipeService = new RecipeRepositoryHttp();
+
   useEffect(() => {
-    fetch("https://backend-login-placeholder.deno.dev/api/recepies", {
+    fetch("https://backend-login-placeholder.deno.dev/api/v2/recipes", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

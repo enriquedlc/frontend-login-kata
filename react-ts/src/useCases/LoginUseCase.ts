@@ -8,13 +8,12 @@ interface LoginUseCaseParams {
   router: Router;
 }
 
-
 export class LoginUseCase {
   private readonly authService: AuthService;
   private readonly tokenRepository: TokenRepository;
   private readonly router: Router;
 
-  constructor({authService, tokenRepository, router} : LoginUseCaseParams) {
+  constructor({ authService, tokenRepository, router }: LoginUseCaseParams) {
     this.authService = authService;
     this.tokenRepository = tokenRepository;
     this.router = router;
