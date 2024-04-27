@@ -11,7 +11,7 @@ export class RecipeRepositoryHttp implements RecipeRepository {
           "Content-Type": "application/json",
           api_token: `26df07b5b7318455b8ca09f923eaae6de6eb95530743eddcfdb541df9487df9d`,
         },
-      },
+      }
     );
     const data = await response.json();
 
@@ -30,7 +30,7 @@ export class RecipeRepositoryHttp implements RecipeRepository {
           "Content-Type": "application/json",
           api_token: `26df07b5b7318455b8ca09f923eaae6de6eb95530743eddcfdb541df9487df9d`,
         },
-      },
+      }
     );
     const data = await response.json();
 
@@ -40,7 +40,7 @@ export class RecipeRepositoryHttp implements RecipeRepository {
     return data.payload.recipe;
   }
 
-  createRecipe(recipe: Recipe): Promise<{
+  createRecipe(): Promise<{
     status: "error" | "success";
     payload: {
       recipe: Recipe;

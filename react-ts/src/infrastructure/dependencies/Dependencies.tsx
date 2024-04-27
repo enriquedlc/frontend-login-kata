@@ -2,9 +2,10 @@ import { createContext, ReactNode, useContext } from "react";
 import { interfaces } from "inversify";
 
 export const ContainerContext = createContext<interfaces.Container | null>(
-  null,
+  null
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useContainerContext() {
   const container = useContext(ContainerContext);
 
