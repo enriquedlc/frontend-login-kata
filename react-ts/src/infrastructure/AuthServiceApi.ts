@@ -1,3 +1,9 @@
+import {
+  DomainErrorCode,
+  MissingEmailError,
+  MissingPasswordError,
+  WrongEmailOrPasswordError,
+} from "../error/DomainError";
 import { AuthService, Jwt } from "./AuthService";
 
 export class AuthServiceApi implements AuthService {
@@ -15,11 +21,19 @@ export class AuthServiceApi implements AuthService {
 
     const data = await response.json();
 
-    console.log(data);
-
     if (data.status === "error") {
-      throw new Error(data.code);
+      domainErrorMapper(data.code);
     }
     return data.payload.jwt;
   }
 }
+
+const ERROR_MAP: Record<DomainErrorCode, () => Error> = {
+  [DomainErrorCode.MissingEmail]: () => new MissingEmailError(),
+  [DomainErrorCode.MissingPasswordField]: () => new MissingPasswordError(),
+  [DomainErrorCode.WrongEmailOrPassword]: () => new WrongEmailOrPasswordError(),
+};
+
+const domainErrorMapper = (code: DomainErrorCode) => {
+  throw ERROR_MAP[code]();
+};

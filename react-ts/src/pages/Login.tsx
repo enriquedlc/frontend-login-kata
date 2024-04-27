@@ -43,8 +43,8 @@ export const Login = () => {
 
     loginUseCase
       .execute({ email, password })
-      .catch((err) => setErrorMessage(err.message))
-      .catch(propagateError)
+      //   .catch((err) => setErrorMessage(err.message))
+      //   .catch(propagateError)
       .finally(() => setIsLoading(false));
   };
 

@@ -55,4 +55,39 @@ describe("Login", () => {
       }
     );
   });
+  it("ui renders error Wrong email or password message", async () => {
+    const user = userEvent.setup();
+    const navigateSpy = vi.fn();
+    const router = new RouterReactRouter(navigateSpy);
+    const tokenRepository = new TokenRepositoryLocalStorage();
+
+    const authService: AuthService = {
+      execute: async ({ email, password }) =>
+        await fakeLogin({ email, password }),
+    };
+
+    const container = new Container();
+    container.bind("AuthService").toConstantValue(authService);
+    container.bind("TokenRepository").toConstantValue(tokenRepository);
+    container.bind("Router").toConstantValue(router);
+
+    render(
+      <ContainerProvider container={container}>
+        <Login />
+      </ContainerProvider>
+    );
+
+    await user.type(screen.getByLabelText("Your email"), "asdf");
+    await user.type(screen.getByLabelText("Your password"), "asdf");
+    await user.click(screen.getByRole("button", { name: /login/i }));
+
+    await waitFor(
+      () => {
+        screen.getByText("Wrong email or password");
+      },
+      {
+        timeout: 5000,
+      }
+    );
+  });
 });

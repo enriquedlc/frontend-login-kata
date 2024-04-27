@@ -6,7 +6,12 @@ import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./navigation/AppRoutes";
 import { ErrorBoundary } from "./components/error/ErrorBoundary";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")!, {
+  identifierPrefix: "remix",
+  onRecoverableError: (error, errorInfo) => {
+    console.error(error, errorInfo);
+  },
+}).render(
   <React.StrictMode>
     <BrowserRouter>
       <ErrorBoundary>
