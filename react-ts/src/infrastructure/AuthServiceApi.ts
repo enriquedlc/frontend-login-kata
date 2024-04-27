@@ -16,7 +16,7 @@ export class AuthServiceApi implements AuthService {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const data = await response.json();

@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext } from "react";
 import { interfaces } from "inversify";
 
 export const ContainerContext = createContext<interfaces.Container | null>(
-  null
+  null,
 );
 
 export function useContainerContext() {

@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById("root")!, {
         <AppRoutes />
       </BrowserRouter>
     </ErrorBoundary>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

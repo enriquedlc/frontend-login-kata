@@ -37,12 +37,12 @@ describe("Login", () => {
     render(
       <ContainerProvider container={container}>
         <Login />
-      </ContainerProvider>
+      </ContainerProvider>,
     );
 
     await user.type(
       screen.getByLabelText("Your email"),
-      "linustorvalds@gmail.com"
+      "linustorvalds@gmail.com",
     );
     await user.type(screen.getByLabelText("Your password"), "ilovecats");
 
@@ -54,7 +54,7 @@ describe("Login", () => {
       },
       {
         timeout: 5000,
-      }
+      },
     );
   });
 
@@ -76,7 +76,7 @@ describe("Login", () => {
         <ContainerProvider container={container}>
           <Login />
         </ContainerProvider>
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     await user.type(screen.getByLabelText("Your email"), "asdf@gmail.com");
@@ -89,7 +89,7 @@ describe("Login", () => {
       },
       {
         timeout: 5000,
-      }
+      },
     );
   });
 });

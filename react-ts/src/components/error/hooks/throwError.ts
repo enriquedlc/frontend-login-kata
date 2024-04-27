@@ -8,7 +8,7 @@ export const useAsyncError = () => {
         throw e;
       });
     },
-    [setError]
+    [setError],
   );
   return { propagateError };
 };
