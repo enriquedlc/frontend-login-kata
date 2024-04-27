@@ -2,14 +2,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { Container } from "inversify";
 import { describe, expect, it, vi } from "vitest";
+import { ErrorBoundary } from "../components/error/ErrorBoundary";
 import { AuthService } from "../infrastructure/AuthService";
 import { AuthServiceApi } from "../infrastructure/AuthServiceApi";
 import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
 import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
 import { ContainerProvider } from "../infrastructure/dependencies/Dependencies";
 import { Login } from "./Login";
-import { useEffect } from "react";
-import { ErrorBoundary } from "../components/error/ErrorBoundary";
 
 const fakeLogin = async ({ email, password }: LoginParams) => {
   if (email === "linustorvalds@gmail.com" && password === "ilovecats") {
@@ -73,11 +72,11 @@ describe("Login", () => {
       .toConstantValue(new RouterReactRouter(navigateSpy));
 
     render(
-      //   <ErrorBoundary>
-      <ContainerProvider container={container}>
-        <Login />
-      </ContainerProvider>
-      //   </ErrorBoundary>
+      <ErrorBoundary>
+        <ContainerProvider container={container}>
+          <Login />
+        </ContainerProvider>
+      </ErrorBoundary>
     );
 
     await user.type(screen.getByLabelText("Your email"), "asdf@gmail.com");
