@@ -9,20 +9,19 @@ export class DomainError extends Error {
 
   constructor(message: string, code: DomainErrorCode) {
     super(message);
-    this.name = "DomainError";
     this.code = code;
   }
 }
 
 export class MissingEmailError extends DomainError {
   constructor() {
-    super("Email is missing", DomainErrorCode.MissingEmail);
+    super("Email field is required", DomainErrorCode.MissingEmail);
   }
 }
 
 export class MissingPasswordError extends DomainError {
   constructor() {
-    super("Password is missing", DomainErrorCode.MissingPasswordField);
+    super("Password field is required", DomainErrorCode.MissingPasswordField);
   }
 }
 

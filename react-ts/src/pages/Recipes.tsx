@@ -39,11 +39,7 @@ export const Recipes = () => {
       <Title>Recipes</Title>
       <div className="recipes">
         {recipes.map((recipe) => (
-          <RecipeCard
-            name={recipe.name}
-            ingredients={recipe.ingredients}
-            key={recipe.id}
-          />
+          <RecipeCard key={recipe.id} {...recipe} />
         ))}
       </div>
     </main>

@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
+
 import { Button } from "../components/Button.js";
 import { EmailField } from "../components/EmailField.js";
 import { PasswordField } from "../components/PasswordField.js";
 import { Title } from "../components/Title.js";
+import { AuthService } from "../infrastructure/AuthService.ts";
 import { useContainerContext } from "../infrastructure/dependencies/Dependencies.js";
-import { translateError } from "../utils/translateError.js";
+import { Router } from "../infrastructure/Router.ts";
+import { TokenRepository } from "../infrastructure/TokenRepository.ts";
 import { LoginUseCase } from "../useCases/LoginUseCase.ts";
 
 import "./Login.css";
-import { AuthService } from "../infrastructure/AuthService.ts";
-import { TokenRepository } from "../infrastructure/TokenRepository.ts";
-import { Router } from "../infrastructure/Router.ts";
-import { useAsyncError } from "../components/error/hooks/throwError.ts";
 
 export const Login = () => {
   const container = useContainerContext();
-  const { propagateError } = useAsyncError();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,8 +41,7 @@ export const Login = () => {
 
     loginUseCase
       .execute({ email, password })
-      //   .catch((err) => setErrorMessage(err.message))
-      .catch(propagateError)
+      .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));
   };
 
@@ -66,7 +63,7 @@ export const Login = () => {
           value={password}
           onChange={setPassword}
         />
-        {errorMessage && <p>{translateError(errorMessage)}</p>}
+        {errorMessage && <p>{errorMessage}</p>}
         <Button title="Login" disabled={isLoading} />
       </form>
     </main>

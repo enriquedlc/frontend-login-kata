@@ -1,15 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./reset.css";
-import "./main.css";
 import { BrowserRouter } from "react-router-dom";
-import { AppRoutes } from "./navigation/AppRoutes";
+
 import { ErrorBoundary } from "./components/error/ErrorBoundary";
+import { AppRoutes } from "./navigation/AppRoutes";
+
+import "./main.css";
+import "./reset.css";
 
 ReactDOM.createRoot(document.getElementById("root")!, {
-  identifierPrefix: "remix",
   onRecoverableError: (error, errorInfo) => {
-    console.error(error, errorInfo);
+    console.error("__ON_RECOVERABLEERROR CREATE_ROOT__ " + error, errorInfo);
   },
 }).render(
   <React.StrictMode>

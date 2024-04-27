@@ -1,10 +1,9 @@
-import { NavigateFunction } from "react-router-dom";
 import { Router } from "./Router";
 
 export class RouterReactRouter implements Router {
-  constructor(private navigate: NavigateFunction) {}
+  constructor(private navigate: () => void) {}
 
   goToRecipes() {
-    this.navigate("/recipes");
+    this.navigate();
   }
 }

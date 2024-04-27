@@ -24,6 +24,7 @@ export class AuthServiceApi implements AuthService {
     if (data.status === "error") {
       domainErrorMapper(data.code);
     }
+
     return data.payload.jwt;
   }
 }

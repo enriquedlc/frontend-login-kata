@@ -2,9 +2,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { Container } from "inversify";
 import { describe, expect, it, vi } from "vitest";
-import { ErrorBoundary } from "../components/error/ErrorBoundary";
+
 import { AuthService } from "../infrastructure/AuthService";
-import { AuthServiceApi } from "../infrastructure/AuthServiceApi";
 import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
 import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
 import { ContainerProvider } from "../infrastructure/dependencies/Dependencies";
@@ -21,7 +20,7 @@ describe("Login", () => {
   it("redirects to recipe page after login", async () => {
     const user = userEvent.setup();
     const navigateSpy = vi.fn();
-    const router = new RouterReactRouter(navigateSpy);
+    const router = new RouterReactRouter(() => navigateSpy("/recipes"));
     const tokenRepository = new TokenRepositoryLocalStorage();
 
     const authService: AuthService = {
@@ -45,7 +44,6 @@ describe("Login", () => {
       "linustorvalds@gmail.com",
     );
     await user.type(screen.getByLabelText("Your password"), "ilovecats");
-
     await user.click(screen.getByRole("button", { name: /login/i }));
 
     await waitFor(
@@ -62,8 +60,14 @@ describe("Login", () => {
     const user = userEvent.setup();
     const navigateSpy = vi.fn();
 
+    const authService: AuthService = {
+      execute: () => {
+        throw new Error("Wrong email or password");
+      },
+    };
+
     const container = new Container();
-    container.bind("AuthService").toConstantValue(new AuthServiceApi());
+    container.bind("AuthService").toConstantValue(authService);
     container
       .bind("TokenRepository")
       .toConstantValue(new TokenRepositoryLocalStorage());
@@ -72,11 +76,9 @@ describe("Login", () => {
       .toConstantValue(new RouterReactRouter(navigateSpy));
 
     render(
-      <ErrorBoundary>
-        <ContainerProvider container={container}>
-          <Login />
-        </ContainerProvider>
-      </ErrorBoundary>,
+      <ContainerProvider container={container}>
+        <Login />
+      </ContainerProvider>,
     );
 
     await user.type(screen.getByLabelText("Your email"), "asdf@gmail.com");
