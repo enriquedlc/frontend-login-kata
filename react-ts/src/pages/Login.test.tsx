@@ -8,6 +8,8 @@ import { RouterReactRouter } from "../infrastructure/RouterReactRouter";
 import { TokenRepositoryLocalStorage } from "../infrastructure/TokenRepositoryLocalStorage";
 import { ContainerProvider } from "../infrastructure/dependencies/Dependencies";
 import { Login } from "./Login";
+import { useEffect } from "react";
+import { ErrorBoundary } from "../components/error/ErrorBoundary";
 
 const fakeLogin = async ({ email, password }: LoginParams) => {
   if (email === "linustorvalds@gmail.com" && password === "ilovecats") {
@@ -56,6 +58,7 @@ describe("Login", () => {
       }
     );
   });
+
   it("ui renders error Wrong email or password message", async () => {
     const user = userEvent.setup();
     const navigateSpy = vi.fn();
@@ -70,9 +73,11 @@ describe("Login", () => {
       .toConstantValue(new RouterReactRouter(navigateSpy));
 
     render(
+      //   <ErrorBoundary>
       <ContainerProvider container={container}>
         <Login />
       </ContainerProvider>
+      //   </ErrorBoundary>
     );
 
     await user.type(screen.getByLabelText("Your email"), "asdf@gmail.com");
@@ -81,7 +86,7 @@ describe("Login", () => {
 
     await waitFor(
       () => {
-        screen.getByText("Wrong email or password");
+        expect(screen.getByText("Wrong email or password")).toBeVisible();
       },
       {
         timeout: 5000,
