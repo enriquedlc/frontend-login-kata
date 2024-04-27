@@ -13,10 +13,10 @@ ReactDOM.createRoot(document.getElementById("root")!, {
   },
 }).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <BrowserRouter>
         <AppRoutes />
-      </ErrorBoundary>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 );
